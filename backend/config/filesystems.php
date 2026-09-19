@@ -41,7 +41,10 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            // Nom "medias" plutot que "storage" : certains hebergeurs bloquent
+            // par securite toute URL contenant le mot "storage" (403), meme
+            // pour un fichier public legitime.
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/medias',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -74,7 +77,7 @@ return [
     */
 
     'links' => [
-        public_path('storage') => storage_path('app/public'),
+        public_path('medias') => storage_path('app/public'),
     ],
 
 ];
