@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Laisse passer les vrais fichiers (JS, CSS, images...)
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    # Toutes les autres routes (React Router) renvoient vers index.html
+    RewriteRule ^ index.html [L]
+</IfModule>

@@ -4,3 +4,6 @@
 .idea/
 .DS_Store
 Thumbs.db
+
+# Builds prets a deployer (generes via npm run build, pas du code source)
+/deploiement/
