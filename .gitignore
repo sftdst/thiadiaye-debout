@@ -1,0 +1,6 @@
+# Outils / IDE
+.claude/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
