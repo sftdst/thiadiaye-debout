@@ -40,12 +40,15 @@ return [
 
         'public' => [
             'driver' => 'local',
-            // Ecrit directement dans public/medias (pas storage/app/public +
-            // lien symbolique) : l'hebergement de production bloque (403)
-            // tout acces a un fichier servi via un lien symbolique, quel que
-            // soit son nom. Un vrai dossier sous public/ evite le probleme.
-            'root' => public_path('medias'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/medias',
+            // Ecrit directement dans public/tdcontent (pas storage/app/public +
+            // lien symbolique) : l'hebergement de production bloque (403) par
+            // liste noire tout dossier au nom evocateur d'upload/media
+            // ("storage", "medias" ont ete testes et bloques ; un nom neutre
+            // comme "tdcontent" passe). Un vrai dossier sous public/ evite
+            // aussi le probleme separe des liens symboliques (FollowSymLinks
+            // desactive sur cet hebergeur).
+            'root' => public_path('tdcontent'),
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/tdcontent',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
