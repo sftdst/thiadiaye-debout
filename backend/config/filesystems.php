@@ -40,10 +40,11 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
-            // Nom "medias" plutot que "storage" : certains hebergeurs bloquent
-            // par securite toute URL contenant le mot "storage" (403), meme
-            // pour un fichier public legitime.
+            // Ecrit directement dans public/medias (pas storage/app/public +
+            // lien symbolique) : l'hebergement de production bloque (403)
+            // tout acces a un fichier servi via un lien symbolique, quel que
+            // soit son nom. Un vrai dossier sous public/ evite le probleme.
+            'root' => public_path('medias'),
             'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/medias',
             'visibility' => 'public',
             'throw' => false,
@@ -74,10 +75,10 @@ return [
     | `storage:link` Artisan command is executed. The array keys should be
     | the locations of the links and the values should be their targets.
     |
+    | Le disque "public" ecrit desormais directement dans public/medias
+    | (pas de lien symbolique, cf. ci-dessus) : aucune entree necessaire ici.
     */
 
-    'links' => [
-        public_path('medias') => storage_path('app/public'),
-    ],
+    'links' => [],
 
 ];
