@@ -54,7 +54,7 @@ export function Layout({ children }: { children: ReactNode }) {
           <NavLink to="/articles-presse">Revue de presse</NavLink>
           <NavLink to="/videos">Vidéos</NavLink>
           <NavLink to="/lives">Lives</NavLink>
-          <NavLink to="/memoire">Mémoire</NavLink>
+          <NavLink to="/memoire">Mémoire (Images & témoignages)</NavLink>
 
           <div className="sidebar-section">Participation</div>
           <NavLink to="/sondages">Sondages</NavLink>
