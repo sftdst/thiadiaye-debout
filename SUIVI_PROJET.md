@@ -182,6 +182,9 @@ Le formulaire d'adhésion publique demande désormais une photo de profil, le nu
 - Vérifié via Playwright (headless) : carte avec QR scannable et logo (capture d'écran), champ d'upload visible sur Mémoire, upload PDF bout en bout (POST confirmé + lien visible sur l'accueil public) — 18/18 tests automatisés backend toujours au vert
 - **Restant pour la mise en production** : `admin/` a une nouvelle dépendance (`qrcode.react`) → nécessite un `npm run build` frais avant réupload ; la migration `add_president_cv_to_presentation_mouvement_table` doit être jouée en prod (`php artisan migrate --force`)
 
+## QR Code d'adhésion dans la liste des membres (2026-09-26)
+Bouton "QR Code adhésion" sur la page Membres (admin) → popup affichant un QR code pointant vers le formulaire d'adhésion public (`{VITE_WEB_URL}/adhesion`), utile à afficher/imprimer lors d'un événement pour que les gens s'inscrivent en scannant. Nouvelle variable d'environnement `VITE_WEB_URL` (admin) pour connaître l'URL du site public en production (`https://thiadiaye-debout.com`) — à défaut, retombe sur `http://localhost:5174` en dev.
+
 ## Journal des tâches
 
 ### 2026-09-15
