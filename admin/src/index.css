@@ -1109,6 +1109,27 @@ body {
   flex-shrink: 0;
 }
 
+.qr-adhesion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+  padding: 0.5rem 0 1rem;
+}
+
+.qr-adhesion-code {
+  background: #fff;
+  padding: 16px;
+  border-radius: var(--radius);
+  line-height: 0;
+}
+
+.qr-adhesion-link {
+  font-weight: 600;
+  word-break: break-all;
+}
+
 @media print {
   body * {
     visibility: hidden;

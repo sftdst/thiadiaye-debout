@@ -1,8 +1,12 @@
 import { useEffect, useState, type FormEvent } from 'react'
+import { QRCodeSVG } from 'qrcode.react'
 import { api } from '../api/client'
 import { Modal } from '../components/Modal'
 import { MembreCardPreview } from '../components/MembreCardPreview'
 import { getBadgeColor } from '../utils/badgeColors'
+
+const WEB_URL = import.meta.env.VITE_WEB_URL ?? 'http://localhost:5174'
+const ADHESION_URL = `${WEB_URL}/adhesion`
 
 interface Quartier {
   id: number
@@ -62,6 +66,7 @@ export function MembresPage() {
   const [carteMembre, setCarteMembre] = useState<Membre | null>(null)
   const [reviewMembre, setReviewMembre] = useState<Membre | null>(null)
   const [reviewBusy, setReviewBusy] = useState(false)
+  const [qrOpen, setQrOpen] = useState(false)
 
   function load() {
     setLoading(true)
@@ -165,6 +170,9 @@ export function MembresPage() {
           }}
           className="search-input"
         />
+        <button type="button" className="btn-secondary" onClick={() => setQrOpen(true)}>
+          QR Code adhésion
+        </button>
         <button type="button" className="btn-new" onClick={openCreate}>
           Nouveau membre
         </button>
@@ -344,6 +352,16 @@ export function MembresPage() {
             badge={carteMembre.badges[0]?.nom}
           />
         )}
+      </Modal>
+
+      <Modal open={qrOpen} onClose={() => setQrOpen(false)} title="QR Code d'adhésion">
+        <div className="qr-adhesion">
+          <div className="qr-adhesion-code">
+            <QRCodeSVG value={ADHESION_URL} size={220} />
+          </div>
+          <p>Scannez ce code pour ouvrir directement le formulaire d'adhésion :</p>
+          <p className="qr-adhesion-link">{ADHESION_URL}</p>
+        </div>
       </Modal>
 
       <Modal open={!!reviewMembre} onClose={() => setReviewMembre(null)} title="Vérifier l'adhésion">
