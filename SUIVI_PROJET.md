@@ -175,6 +175,13 @@ Le formulaire d'adhésion publique demande désormais une photo de profil, le nu
 - Tests automatisés mis à jour et complétés (adhésion avec fichiers obligatoires, blocage de connexion tant que non approuvé) — 18/18 tests au vert
 - Vérifié de bout en bout via Playwright (formulaire, webcam simulée, écran d'attente, revue admin, approbation, connexion) et curl
 
+## Carte membre (QR + logo), upload d'images Mémoire, CV PDF du président (2026-09-26)
+- **Carte de membre (admin)** : ajout du logo du mouvement et d'un QR code (encode le numéro de carte, `qrcode.react`) sur la carte visuelle imprimable, en plus des informations déjà présentes
+- **Mémoire — photos d'archive** : le formulaire admin acceptait uniquement une URL collée ; il permet maintenant aussi d'uploader directement un fichier image (`POST/PUT /admin/memoire/photos` en `multipart/form-data`, validation `required_without` pour accepter l'un ou l'autre), stocké comme les autres fichiers du projet (`storage`, disque `public` → dossier `tdcontent`)
+- **Biographie du président — PDF** : nouvelle colonne `president_cv_url` sur `presentation_mouvement`. L'admin peut uploader un PDF (CV/biographie complète, `mimes:pdf`, 10 Mo max) depuis la page "Présentation du mouvement" ; le site public affiche un lien "📄 Lire la biographie complète (PDF)" sous la biographie courte lorsqu'un PDF est renseigné
+- Vérifié via Playwright (headless) : carte avec QR scannable et logo (capture d'écran), champ d'upload visible sur Mémoire, upload PDF bout en bout (POST confirmé + lien visible sur l'accueil public) — 18/18 tests automatisés backend toujours au vert
+- **Restant pour la mise en production** : `admin/` a une nouvelle dépendance (`qrcode.react`) → nécessite un `npm run build` frais avant réupload ; la migration `add_president_cv_to_presentation_mouvement_table` doit être jouée en prod (`php artisan migrate --force`)
+
 ## Journal des tâches
 
 ### 2026-09-15
