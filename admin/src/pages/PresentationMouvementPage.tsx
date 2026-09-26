@@ -8,6 +8,7 @@ interface Presentation {
   president_titre: string | null
   president_bio: string | null
   president_photo_url: string | null
+  president_cv_url: string | null
 }
 
 const emptyForm = { description: '', president_nom: '', president_titre: '', president_bio: '' }
@@ -18,6 +19,8 @@ export function PresentationMouvementPage() {
   const [form, setForm] = useState(emptyForm)
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
   const [photoFile, setPhotoFile] = useState<File | null>(null)
+  const [cvUrl, setCvUrl] = useState<string | null>(null)
+  const [cvFile, setCvFile] = useState<File | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
 
@@ -32,6 +35,7 @@ export function PresentationMouvementPage() {
           president_bio: data.president_bio ?? '',
         })
         setPhotoUrl(data.president_photo_url)
+        setCvUrl(data.president_cv_url)
       })
       .finally(() => setLoading(false))
   }, [])
@@ -50,9 +54,14 @@ export function PresentationMouvementPage() {
       if (photoFile) {
         payload.append('photo', photoFile)
       }
+      if (cvFile) {
+        payload.append('cv', cvFile)
+      }
       const { data } = await api.post<Presentation>('/admin/presentation-mouvement', payload)
       setPhotoUrl(data.president_photo_url)
       setPhotoFile(null)
+      setCvUrl(data.president_cv_url)
+      setCvFile(null)
       setSuccess(true)
     } catch {
       setError("Impossible d'enregistrer la présentation du mouvement.")
@@ -124,6 +133,22 @@ export function PresentationMouvementPage() {
             alt="Aperçu du président"
             className="photo-upload-preview"
           />
+        )}
+
+        <label>
+          Biographie complète (PDF, optionnel)
+          <input type="file" accept="application/pdf" onChange={(e) => setCvFile(e.target.files?.[0] ?? null)} />
+        </label>
+
+        {(cvFile || cvUrl) && (
+          <p className="auth-hint">
+            📄{' '}
+            {cvFile ? cvFile.name : (
+              <a href={cvUrl as string} target="_blank" rel="noreferrer">
+                Voir le PDF actuel
+              </a>
+            )}
+          </p>
         )}
 
         {error && <p className="form-error">{error}</p>}

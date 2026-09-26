@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { api } from '../api/client'
 import { Modal } from '../components/Modal'
 
@@ -26,6 +26,7 @@ export function MemoirePage() {
   const [livreOr, setLivreOr] = useState<ModerableItem[]>([])
   const [search, setSearch] = useState('')
   const [photoForm, setPhotoForm] = useState(emptyPhotoForm)
+  const [photoFile, setPhotoFile] = useState<File | null>(null)
   const [editingId, setEditingId] = useState<number | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -41,6 +42,7 @@ export function MemoirePage() {
   function openCreate() {
     setEditingId(null)
     setPhotoForm(emptyPhotoForm)
+    setPhotoFile(null)
     setError(null)
     setModalOpen(true)
   }
@@ -53,27 +55,38 @@ export function MemoirePage() {
       url: photo.url,
       annee: photo.annee ? String(photo.annee) : '',
     })
+    setPhotoFile(null)
     setError(null)
     setModalOpen(true)
+  }
+
+  function handlePhotoFile(e: ChangeEvent<HTMLInputElement>) {
+    setPhotoFile(e.target.files?.[0] ?? null)
   }
 
   async function submitPhoto(e: FormEvent) {
     e.preventDefault()
     setError(null)
-    const payload = {
-      ...photoForm,
-      annee: photoForm.annee ? Number(photoForm.annee) : undefined,
+    const payload = new FormData()
+    payload.append('titre', photoForm.titre)
+    if (photoForm.description) payload.append('description', photoForm.description)
+    if (photoForm.annee) payload.append('annee', photoForm.annee)
+    if (photoFile) {
+      payload.append('photo', photoFile)
+    } else if (photoForm.url) {
+      payload.append('url', photoForm.url)
     }
     try {
       if (editingId) {
-        await api.put(`/admin/memoire/photos/${editingId}`, payload)
+        payload.append('_method', 'PUT')
+        await api.post(`/admin/memoire/photos/${editingId}`, payload)
       } else {
         await api.post('/admin/memoire/photos', payload)
       }
       setModalOpen(false)
       load()
     } catch {
-      setError("Impossible d'enregistrer cette photo (vérifiez l'URL).")
+      setError("Impossible d'enregistrer cette photo (fournissez une URL ou une image).")
     }
   }
 
@@ -207,10 +220,14 @@ export function MemoirePage() {
             />
           </label>
           <label>
-            URL
+            Image (upload)
+            <input type="file" accept="image/*" onChange={handlePhotoFile} />
+          </label>
+          <label>
+            Ou URL de l'image
             <input
               type="url"
-              required
+              placeholder="https://…"
               value={photoForm.url}
               onChange={(e) => setPhotoForm({ ...photoForm, url: e.target.value })}
             />

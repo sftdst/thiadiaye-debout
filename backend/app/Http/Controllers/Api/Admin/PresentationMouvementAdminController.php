@@ -17,6 +17,7 @@ class PresentationMouvementAdminController extends Controller
             'president_titre' => ['nullable', 'string', 'max:255'],
             'president_bio' => ['nullable', 'string'],
             'photo' => ['nullable', 'image', 'max:4096'],
+            'cv' => ['nullable', 'mimes:pdf', 'max:10240'],
         ]);
 
         $presentation = PresentationMouvement::firstOrCreate([]);
@@ -26,6 +27,12 @@ class PresentationMouvementAdminController extends Controller
             $data['president_photo_url'] = Storage::disk('public')->url($path);
         }
         unset($data['photo']);
+
+        if ($request->hasFile('cv')) {
+            $path = $request->file('cv')->store('presentation', 'public');
+            $data['president_cv_url'] = Storage::disk('public')->url($path);
+        }
+        unset($data['cv']);
 
         $presentation->update($data);
 

@@ -741,6 +741,20 @@ body.mode-simplifie .hero p {
   text-align: justify;
 }
 
+.president-cv-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  color: var(--electric-blue);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.president-cv-link:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 720px) {
   .president-feature {
     grid-template-columns: 1fr;

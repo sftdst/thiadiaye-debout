@@ -1,3 +1,4 @@
+import { QRCodeSVG } from 'qrcode.react'
 import { getBadgeColor } from '../utils/badgeColors'
 
 interface MembreCardPreviewProps {
@@ -13,7 +14,10 @@ export function MembreCardPreview({ numeroCarte, nom, quartier, dateAdhesion, ba
     <div className="membre-card-print">
       <div className="membre-card-visual">
         <div className="membre-card-visual-header">
-          <span className="membre-card-visual-brand">Thiadiaye Debout</span>
+          <div className="membre-card-visual-brand-group">
+            <img src="/logo.png" alt="" className="membre-card-visual-logo" />
+            <span className="membre-card-visual-brand">Thiadiaye Debout</span>
+          </div>
           {badge && (
             <span
               className="membre-card-visual-badge"
@@ -28,10 +32,17 @@ export function MembreCardPreview({ numeroCarte, nom, quartier, dateAdhesion, ba
           <span className="color-dot" style={{ background: quartier.couleur }} />
           {quartier.nom}
         </p>
-        <p className="membre-card-visual-numero">{numeroCarte}</p>
-        <p className="membre-card-visual-date">
-          Membre depuis le {new Date(dateAdhesion).toLocaleDateString('fr-FR')}
-        </p>
+        <div className="membre-card-visual-footer">
+          <div>
+            <p className="membre-card-visual-numero">{numeroCarte}</p>
+            <p className="membre-card-visual-date">
+              Membre depuis le {new Date(dateAdhesion).toLocaleDateString('fr-FR')}
+            </p>
+          </div>
+          <div className="membre-card-visual-qr">
+            <QRCodeSVG value={numeroCarte} size={64} />
+          </div>
+        </div>
       </div>
       <button type="button" className="btn-primary" onClick={() => window.print()}>
         Imprimer la carte

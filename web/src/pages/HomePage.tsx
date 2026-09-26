@@ -14,6 +14,7 @@ interface Presentation {
   president_titre: string | null
   president_bio: string | null
   president_photo_url: string | null
+  president_cv_url: string | null
 }
 
 export function HomePage() {
@@ -105,6 +106,16 @@ export function HomePage() {
               )}
               {presentation.president_bio && (
                 <p className="president-bio-text">{presentation.president_bio}</p>
+              )}
+              {presentation.president_cv_url && (
+                <a
+                  href={presentation.president_cv_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="president-cv-link"
+                >
+                  📄 Lire la biographie complète (PDF)
+                </a>
               )}
             </div>
           </div>

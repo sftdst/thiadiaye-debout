@@ -7,6 +7,7 @@ use App\Models\ArchivePhoto;
 use App\Models\MessageLivreOr;
 use App\Models\TemoignageAncien;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MemoireAdminController extends Controller
 {
@@ -15,9 +16,15 @@ class MemoireAdminController extends Controller
         $data = $request->validate([
             'titre' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'url' => ['required', 'url', 'max:2048'],
+            'url' => ['required_without:photo', 'nullable', 'url', 'max:2048'],
+            'photo' => ['required_without:url', 'nullable', 'image', 'max:5120'],
             'annee' => ['nullable', 'integer', 'min:1900', 'max:'.date('Y')],
         ]);
+
+        if ($request->hasFile('photo')) {
+            $data['url'] = Storage::disk('public')->url($request->file('photo')->store('memoire', 'public'));
+        }
+        unset($data['photo']);
 
         return response()->json(ArchivePhoto::create($data), 201);
     }
@@ -27,9 +34,15 @@ class MemoireAdminController extends Controller
         $data = $request->validate([
             'titre' => ['sometimes', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'url' => ['sometimes', 'url', 'max:2048'],
+            'url' => ['nullable', 'url', 'max:2048'],
+            'photo' => ['nullable', 'image', 'max:5120'],
             'annee' => ['nullable', 'integer', 'min:1900', 'max:'.date('Y')],
         ]);
+
+        if ($request->hasFile('photo')) {
+            $data['url'] = Storage::disk('public')->url($request->file('photo')->store('memoire', 'public'));
+        }
+        unset($data['photo']);
 
         $archivePhoto->update($data);
 
